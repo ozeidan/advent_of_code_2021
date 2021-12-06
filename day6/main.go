@@ -17,8 +17,10 @@ func main() {
 	scanner.Scan()
 	timerLine := scanner.Text()
 	amountOfFishWithDays := initialiseCounts(timerLine)
-	populationAfter80 := simulateFishLife(amountOfFishWithDays, 80)
-	populationAfter256 := simulateFishLife(amountOfFishWithDays, 256-80)
+
+	idx := 0
+	populationAfter80, idx := simulateFishLife(amountOfFishWithDays, 80, idx)
+	populationAfter256, _ := simulateFishLife(amountOfFishWithDays, 256-80, idx)
 
 	fmt.Printf("population count after:\n\t80 days: %d\n\t256 days: %d\n",
 		populationAfter80,
@@ -38,9 +40,9 @@ func initialiseCounts(initialTimers string) []int {
 	return amountOfFishWithDays
 }
 
-func simulateFishLife(amountOfFishWithDays []int, simulationLengthDays int) int {
+func simulateFishLife(amountOfFishWithDays []int, simulationLengthDays, idx int) (int, int) {
 	for i := 0; i < simulationLengthDays; i++ {
-		step(amountOfFishWithDays)
+		idx = step(amountOfFishWithDays, idx)
 	}
 
 	sum := 0
@@ -49,15 +51,19 @@ func simulateFishLife(amountOfFishWithDays []int, simulationLengthDays int) int 
 		sum += amount
 	}
 
-	return sum
+	return sum, idx
 }
 
-func step(amountOfFish []int) {
-	reproducingFish := amountOfFish[0]
+func step(amountOfFish []int, currentIndex int) int {
+	reproducingFish := amountOfFish[calcIndex(currentIndex, 0)]
 
-	for i := 0; i < 8; i++ {
-		amountOfFish[i] = amountOfFish[i+1]
-	}
-	amountOfFish[8] = reproducingFish
-	amountOfFish[6] += reproducingFish
+	currentIndex = calcIndex(currentIndex, 1)
+	amountOfFish[calcIndex(currentIndex, 8)] = reproducingFish
+	amountOfFish[calcIndex(currentIndex, 6)] += reproducingFish
+
+	return currentIndex
+}
+
+func calcIndex(index, offset int) int {
+	return (index + offset) % 9
 }
