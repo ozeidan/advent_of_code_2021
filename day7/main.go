@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -61,7 +62,7 @@ func part1(positions []int, maxPosition int) {
 }
 
 func part2(positions []int, maxPosition int) {
-	minCost := 10000000000
+	minCost := math.MaxInt
 	for i := 0; i <= maxPosition; i++ {
 		cost := 0
 
