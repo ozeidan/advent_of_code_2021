@@ -81,7 +81,7 @@ func part1(inputLines []inputLine) {
 	result := 0
 	for _, inputLine := range inputLines {
 		for _, digit := range inputLine.digitPatterns {
-			if _, ok := digitsOfLengths[len(digit)]; ok {
+			if len(digitsOfLengths[len(digit)]) == 1 {
 				result++
 			}
 		}
